@@ -7,7 +7,6 @@ import shelljs from 'shelljs';
 const app = express();
 const port = process.env.SYSTEM_STATUS_PORT || 8282;
 const { services } = JSON.parse(fs.readFileSync(path.join(__dirname + '/../config.json')));
-// const { services } = require('./config.json');
 const command = `systemctl show ${services.join(' ')} -p Description -p ActiveState -p StateChangeTimestamp`;
 app.use(cors());
 app.use(express.static(path.join(__dirname + '/client/')));
@@ -18,8 +17,7 @@ app.get('/api', (req, res) => {
 		.trim()
 		.split('\n\n')
 		.map((serviceData) => {
-			// eslint-disable-next-line no-unused-vars
-			let [_, name, activeState, stateChangeTimestamp] = serviceData.match(/Description=(.+)\nActiveState=(.+)\nStateChangeTimestamp=(.+)/m);
+			let [, name, activeState, stateChangeTimestamp] = serviceData.match(/Description=(.+)\nActiveState=(.+)\nStateChangeTimestamp=(.+)/m);
 			stateChangeTimestamp = stateChangeTimestamp.split(' ');
 			stateChangeTimestamp.pop();
 			stateChangeTimestamp = stateChangeTimestamp.join(' ');
