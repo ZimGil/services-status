@@ -35,7 +35,8 @@ app.get('/api', (req, res) => {
 			timestamp.pop();
 			timestamp = timestamp.join(' ');
 			return {
-				name: serviceTitleMap[name] || name,
+        name,
+				title: serviceTitleMap[name],
 				isActive: activeState === 'active',
 				timestamp: new Date(timestamp)
 			};

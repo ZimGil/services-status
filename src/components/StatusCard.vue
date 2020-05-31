@@ -2,7 +2,12 @@
 <v-card class="service-card">
   <v-card-title class="service-title">
     <v-icon :color="iconColor" x-large>{{ iconName }}</v-icon>
-    {{ service.name }}
+    <v-tooltip bottom :disabled="!service.title">
+      <template v-slot:activator="{ on }">
+        <span v-on="on">{{ service.title || service.name }}</span>
+      </template>
+      <span>{{ service.name}}</span>
+    </v-tooltip>
   </v-card-title>
     <v-card-text>
     {{ timeAgo }}
