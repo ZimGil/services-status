@@ -15,7 +15,8 @@ services = services.map((service) => {
   }
   return service.name;
 })
-const command = `systemctl show ${services.join(' ')} -p Description -p ActiveState -p StateChangeTimestamp`;
+const command = `systemctl show ${services.join(' ')} -p Id -p ActiveState -p StateChangeTimestamp`;
+const detailsRegex = /Id=(.+)\nActiveState=(.+)\nStateChangeTimestamp=(.+)/m;
 
 app.use(cors());
 app.use(express.static(path.join(__dirname + '/client/')));
@@ -26,14 +27,17 @@ app.get('/api', (req, res) => {
 		.trim()
 		.split('\n\n')
 		.map((serviceData) => {
-			let [, name, activeState, stateChangeTimestamp] = serviceData.match(/Description=(.+)\nActiveState=(.+)\nStateChangeTimestamp=(.+)/m);
-			stateChangeTimestamp = stateChangeTimestamp.split(' ');
-			stateChangeTimestamp.pop();
-			stateChangeTimestamp = stateChangeTimestamp.join(' ');
+      let [, name, activeState, timestamp] = serviceData.match(detailsRegex);
+      name = name.split('.');
+      name.pop();
+      name = name.join('.');
+			timestamp = timestamp.split(' ');
+			timestamp.pop();
+			timestamp = timestamp.join(' ');
 			return {
 				name: serviceTitleMap[name] || name,
 				isActive: activeState === 'active',
-				timestamp: new Date(stateChangeTimestamp)
+				timestamp: new Date(timestamp)
 			};
 		});
 
