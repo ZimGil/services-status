@@ -6,8 +6,17 @@ import shelljs from 'shelljs';
 
 const app = express();
 const port = process.env.SYSTEM_STATUS_PORT || 8282;
-const { services } = JSON.parse(fs.readFileSync(path.join(__dirname + '/../config.json')));
+const serviceTitleMap = {};
+let { services } = JSON.parse(fs.readFileSync(path.join(__dirname + '/../config.json')));
+services = services.map((service) => {
+  if (typeof service === 'string') {return service;}
+  if (service.title) {
+    serviceTitleMap[service.name] = service.title;
+  }
+  return service.name;
+})
 const command = `systemctl show ${services.join(' ')} -p Description -p ActiveState -p StateChangeTimestamp`;
+
 app.use(cors());
 app.use(express.static(path.join(__dirname + '/client/')));
 
@@ -22,7 +31,7 @@ app.get('/api', (req, res) => {
 			stateChangeTimestamp.pop();
 			stateChangeTimestamp = stateChangeTimestamp.join(' ');
 			return {
-				name,
+				name: serviceTitleMap[name] || name,
 				isActive: activeState === 'active',
 				timestamp: new Date(stateChangeTimestamp)
 			};
