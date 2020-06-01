@@ -7,8 +7,8 @@
     "serve": "vue-cli-service serve",
     "build": "npm run build:server && npm run build:client",
     "build:server": "babel server/ --out-dir dist/ --presets=@babel/preset-env",
-    "build:client": "vue-cli-service build --dest dist/client/ --presets=@vue/cli-plugin-babel/preset",
-    "lint": "vue-cli-service lint"
+    "build:client": "vue-cli-service build --dest dist/client/ --presets=@vue/cli-plugin-babel/preset --skip-plugins @vue/cli-plugin-eslint",
+    "lint": "vue-cli-service lint ."
   },
   "dependencies": {
     "axios": "^0.19.2",
