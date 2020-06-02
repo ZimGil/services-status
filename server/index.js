@@ -28,12 +28,8 @@ app.get('/api', (req, res) => {
 		.split('\n\n')
 		.map((serviceData) => {
       let [, name, activeState, timestamp] = serviceData.match(detailsRegex);
-      name = name.split('.');
-      name.pop();
-      name = name.join('.');
-			timestamp = timestamp.split(' ');
-			timestamp.pop();
-			timestamp = timestamp.join(' ');
+      name = name.split('.').slice(0, -1).join('.');
+			timestamp = timestamp.split(' ').slice(0, -1).join(' ');
 			return {
         name,
 				title: serviceTitleMap[name],
