@@ -32,7 +32,7 @@ export default {
 <style lang="scss" scoped>
   .service-card {
     width: 480px;
-    margin-bottom: 15px;
+    margin: 0 5px 15px;
 
     .service-title {
       margin: auto;
