@@ -6,24 +6,38 @@ import shelljs from 'shelljs';
 
 const app = express();
 const port = process.env.SYSTEM_STATUS_PORT || 8282;
+const clientAppPath = path.join(__dirname + '/client');
+const configFilePath = path.join(__dirname + '/../config.json');
+const configData = fs.readFileSync(configFilePath);
 const serviceTitleMap = {};
-let { services } = JSON.parse(fs.readFileSync(path.join(__dirname + '/../config.json')));
+
+app.use(cors());
+app.use(express.static(clientAppPath));
+
+let { services } = JSON.parse(configData);
 services = services.map((service) => {
   if (typeof service === 'string') { return service; }
   if (service.title) {
     serviceTitleMap[service.name] = service.title;
   }
   return service.name;
-})
+});
+
 const command = `systemctl show ${services.join(' ')} -p Id -p ActiveState -p StateChangeTimestamp`;
 const detailsRegex = /Id=(.+)\nActiveState=(.+)\nStateChangeTimestamp=(.+)/m;
 
-app.use(cors());
-app.use(express.static(path.join(__dirname + '/client/')));
 
 app.get('/api', (req, res) => {
   if (!services) { res.sendStatus(204); }
-  const currentStatus = shelljs.exec(command, { silent: true })
+  res.send(getStatus());
+});
+
+app.get('/', (req, res) => res.sendFile(`${clientAppPath}/index.html`));
+
+app.listen(port);
+
+function getStatus() {
+  return shelljs.exec(command, { silent: true })
     .trim()
     .split('\n\n')
     .map((serviceData) => {
@@ -37,10 +51,4 @@ app.get('/api', (req, res) => {
         timestamp: new Date(timestamp)
       };
     });
-
-  res.send(currentStatus);
-});
-
-app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/client/index.html')));
-
-app.listen(port);
+}
