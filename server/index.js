@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import express from 'express';
 import cors from 'cors';
-import shelljs from 'shelljs';
+import systemdStatus from 'systemd-status';
 
 const app = express();
 const port = process.env.SYSTEM_STATUS_PORT || 8282;
@@ -23,32 +23,15 @@ services = services.map((service) => {
   return service.name;
 });
 
-const command = `systemctl show ${services.join(' ')} -p Id -p ActiveState -p StateChangeTimestamp`;
-const detailsRegex = /Id=(.+)\nActiveState=(.+)\nStateChangeTimestamp=(.+)/m;
-
-
 app.get('/api', (req, res) => {
   if (!services) { res.sendStatus(204); }
-  res.send(getStatus());
+  res.send(systemdStatus(services).map(addTitle));
 });
 
 app.get('/', (req, res) => res.sendFile(`${clientAppPath}/index.html`));
 
 app.listen(port);
 
-function getStatus() {
-  return shelljs.exec(command, { silent: true })
-    .trim()
-    .split('\n\n')
-    .map((serviceData) => {
-      let [, name, activeState, timestamp] = serviceData.match(detailsRegex);
-      name = name.split('.').slice(0, -1).join('.');
-      timestamp = timestamp.split(' ').slice(0, -1).join(' ');
-      return {
-        name,
-        title: serviceTitleMap[name],
-        isActive: activeState === 'active',
-        timestamp: new Date(timestamp)
-      };
-    });
+function addTitle(service) {
+  return { ...service, title: serviceTitleMap[service.name] };
 }

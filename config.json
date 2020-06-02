@@ -1,3 +1,40 @@
 {
-	"services": []
+  "services": [
+    {
+      "name": "cloudflare-dynamic-dns",
+      "title": "Dynamic DNS"
+    },
+    {
+      "name": "comedian-tickets-bot",
+      "title": "בוט שחר חסון"
+    },
+    {
+      "name": "plexmediaserver",
+      "title": "Plex"
+    },
+    {
+      "name": "giltichon.com",
+      "title": "Giltichon.com"
+    },
+    {
+      "name": "transmission-daemon",
+      "title": "Transmission"
+    },
+    {
+      "name": "smbd",
+      "title": "Samba"
+    },
+    {
+      "name": "pihole-FTL",
+      "title": "Pi-hole"
+    },
+    {
+      "name": "openvpn",
+      "title": "piVPN"
+    },
+    {
+      "name": "status-systemd",
+      "title": "Services Status"
+    }
+  ]
 }

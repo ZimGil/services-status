@@ -13,13 +13,13 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
-    "lodash.sortby": "^4.7.0",
-    "node-time-ago": "^1.0.0",
-    "vue": "^2.6.11",
-    "vuetify": "^2.2.11",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "shelljs": "^0.8.4"
+    "lodash.sortby": "^4.7.0",
+    "node-time-ago": "^1.0.0",
+    "systemd-status": "^1.0.2",
+    "vue": "^2.6.11",
+    "vuetify": "^2.2.11"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
