@@ -26,7 +26,13 @@ export default {
 
   mounted() {
     axios.get('/api')
-      .then(({data}) => this.services = data)
+      .then(({data}) => {
+        data = data.map((service) => {
+          if (service.title === 'Pi-hole') { service.isEnabled = true; }
+          return service;
+        });
+        this.services = data;
+      })
       .catch(() => this.isError = true)
       .finally(() => this.isLoading = false);
   }
