@@ -20,11 +20,14 @@ import timeAgo from 'node-time-ago';
 
 export default {
   name: 'StatusCard',
-  props: ['service'],
+  props: [ 'service' ],
   computed: {
-    iconColor() {return this.service.isActive ? 'green' : 'red'},
-    iconName() {return this.service.isActive ? 'check_circle_outline' : 'highlight_off'},
-    timeAgo() {return timeAgo(this.service.timestamp);}
+    iconName() { return this.service.isActive ? 'check_circle_outline' : 'highlight_off'; },
+    timeAgo() { return timeAgo(this.service.timestamp); },
+    iconColor() {
+      if (!this.service.timestamp) { return 'grey'; }
+      return this.service.isActive ? 'green' : 'red'
+    }
   }
 };
 </script>

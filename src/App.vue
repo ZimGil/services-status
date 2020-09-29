@@ -8,7 +8,7 @@
 
 <script>
 import axios from 'axios';
-import sortBy from 'lodash.sortby';
+import sortBy from 'lodash/sortBy';
 import StatusCard from './components/StatusCard.vue';
 
 export default {
@@ -21,7 +21,7 @@ export default {
   }),
 
   computed: {
-    sortedServices() {return sortBy(this.services, (service) => service.isActive);}
+    sortedServices() { return sortBy(this.services, [({timestamp}) => !timestamp, 'isActive']); }
   },
 
   mounted() {
