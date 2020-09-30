@@ -8,7 +8,7 @@
 
 <script>
 import axios from 'axios';
-import orderBy from 'lodash/orderBy';
+import sortBy from 'lodash/sortBy';
 import StatusCard from './components/StatusCard.vue';
 
 export default {
@@ -21,18 +21,12 @@ export default {
   }),
 
   computed: {
-    sortedServices() { return orderBy(this.services, ['isEnabled', 'isActive'], ['desc', 'asc']); }
+    sortedServices() { return sortBy(this.services, ['isDisabled', 'isActive']); }
   },
 
   mounted() {
     axios.get('/api')
-      .then(({data}) => {
-        data = data.map((service) => {
-          if (service.title === 'Pi-hole') { service.isEnabled = true; }
-          return service;
-        });
-        this.services = data;
-      })
+      .then(({data}) => this.services = data)
       .catch(() => this.isError = true)
       .finally(() => this.isLoading = false);
   }

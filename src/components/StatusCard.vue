@@ -25,7 +25,7 @@ export default {
     iconName() { return this.service.isActive ? 'check_circle_outline' : 'highlight_off'; },
     timeAgo() { return timeAgo(this.service.timestamp); },
     iconColor() {
-      if (!this.service.timestamp) { return 'grey'; }
+      if (this.service.isDisabled) { return 'grey'; }
       return this.service.isActive ? 'green' : 'red'
     }
   }
