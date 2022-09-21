@@ -19,7 +19,7 @@
     "node-time-ago": "^1.0.0",
     "systemd-status": "^1.2.0",
     "vue": "^2.6.11",
-    "vuetify": "^2.2.32"
+    "vuetify": "^2.6.10"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
