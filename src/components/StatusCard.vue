@@ -10,20 +10,17 @@
     </v-tooltip>
   </v-card-title>
     <v-card-text>
-    {{ timeAgo }}
+    {{ service.status }}
   </v-card-text>
 </v-card>
 </template>
 
 <script>
-import timeAgo from 'node-time-ago';
-
 export default {
   name: 'StatusCard',
   props: [ 'service' ],
   computed: {
     iconName() { return this.service.isActive ? 'check_circle_outline' : 'highlight_off'; },
-    timeAgo() { return timeAgo(this.service.timestamp); },
     iconColor() {
       if (this.service.isDisabled) { return 'grey'; }
       return this.service.isActive ? 'green' : 'red'
